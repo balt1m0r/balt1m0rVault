@@ -1,0 +1,111 @@
+<script>
+(function() {
+    // --- 1. INYECTAR ESTILOS (CSS CARRUSEL) ---
+    var cssVideos =
+        "/* Contenedor principal centrado */" +
+        ".ssn-videos-wrapper { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px 15px; box-sizing: border-box; }" +
+
+        "/* Título de la sección */" +
+        ".ssn-section-title { text-align: center; font-size: 28px; font-weight: 900; text-transform: uppercase; margin-bottom: 25px; color: #1a1a1a; }" +
+
+        "/* Contenedor del Carrusel (Scroll horizontal nativo) */" +
+        ".ssn-carousel { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 20px; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }" +
+
+        "/* Estilizar la barra de scroll para que quede prolija en PC */" +
+        ".ssn-carousel::-webkit-scrollbar { height: 8px; }" +
+        ".ssn-carousel::-webkit-scrollbar-track { background: #3a3a3a; border-radius: 10px; }" +
+        ".ssn-carousel::-webkit-scrollbar-thumb { background: #777; border-radius: 10px; }" +
+        ".ssn-carousel::-webkit-scrollbar-thumb:hover { background: #999; }" +
+
+        "/* Tarjeta de cada video */" +
+        ".ssn-video-item { flex: 0 0 auto; width: 280px; scroll-snap-align: center; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.35); background: #FFFFFF; position: relative; display: flex; flex-direction: column; border: 1px solid #222; }" +
+
+        "/* El video en sí, forzado a formato vertical 9:16 y con borde de detalle */" +
+        ".ssn-video-item video { width: 100%; height: auto; display: block; aspect-ratio: 9/16; object-fit: cover; border-bottom: 2px solid #333; }" +
+
+        "/* Caja de información (Título) */" +
+        ".ssn-video-info { padding: 15px 12px; text-align: center; }" +
+        ".ssn-video-title { margin: 0; font-size: 16px; font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.5px; }" +
+
+        "/* 🛠️ FIX PANTALLA COMPLETA: Evita el zoom y muestra el video entero 🛠️ */" +
+        ".ssn-video-item video:fullscreen { object-fit: contain !important; background: #000; }" +
+        ".ssn-video-item video:-webkit-full-screen { object-fit: contain !important; background: #000; }" +
+        ".ssn-video-item video:-moz-full-screen { object-fit: contain !important; background: #000; }" +
+        ".ssn-video-item video:-ms-fullscreen { object-fit: contain !important; background: #000; }" +
+
+        "/* Ajustes para celulares */" +
+        "@media (max-width: 768px) {" +
+            ".ssn-section-title { font-size: 22px; margin-bottom: 15px; }" +
+            ".ssn-video-item { width: 240px; }" +
+        "}";
+
+    var styleTag = document.createElement('style');
+    styleTag.type = 'text/css';
+    if (styleTag.styleSheet) { styleTag.styleSheet.cssText = cssVideos; }
+    else { styleTag.appendChild(document.createTextNode(cssVideos)); }
+    document.head.appendChild(styleTag);
+
+    // --- 2. DEFINIR LA LISTA DE VIDEOS CON TÍTULO ---
+    var baseUrl = "https://cdn.jsdelivr.net/gh/Baltazarky/balt1m0rVault@main/videosZzRevestimientos/";
+
+    var videosData = [
+        {
+            url: baseUrl + "constructorasYDesarrolladoras.mp4",
+            titulo: "Constructoras y desarrolladoras"
+        },
+        {
+            url: baseUrl + "cualEsCual.mp4",
+            titulo: "¿Cuál es cuál?"
+        },
+        {
+            url: baseUrl + "cuantosMetrosTenesQueComprarParaTuObra.mp4",
+            titulo: "Metros para tu obra"
+        },
+        {
+            url: baseUrl + "vinilicosSVC.mp4",
+            titulo: "VINILOS SPC"
+        },
+        {
+            url: baseUrl + "pagosContraEntrega.mp4",
+            titulo: "Pagos Contra-Entrega"
+        }
+    ];
+
+    // --- 3. ARMAR EL HTML DINÁMICAMENTE ---
+    var htmlVideos = "";
+    for (var i = 0; i < videosData.length; i++) {
+        htmlVideos +=
+            '<div class="ssn-video-item">' +
+                '<video src="' + videosData[i].url + '" preload="metadata" playsinline controls crossorigin="anonymous"></video>' +
+                '<div class="ssn-video-info">' +
+                    '<h3 class="ssn-video-title">' + videosData[i].titulo + '</h3>' +
+                '</div>' +
+            '</div>';
+    }
+
+    var estructuraHTML =
+        '<div class="ssn-videos-wrapper">' +
+            '<h2 class="ssn-section-title">Nuestros revestimientos</h2>' +
+            '<div class="ssn-carousel">' +
+                htmlVideos +
+            '</div>' +
+        '</div>';
+
+    // --- 4. INYECTOR ROBUSTO ---
+    var intentos = 0;
+    var inyector = setInterval(function() {
+        var seccionDestino = document.querySelector('body > div.js-home-sections-container > section.section-banners-home.position-relative.overflow-none');
+
+        if (seccionDestino) {
+            seccionDestino.innerHTML = estructuraHTML;
+            clearInterval(inyector);
+        }
+
+        intentos++;
+        if (intentos > 20) {
+            clearInterval(inyector);
+        }
+    }, 500);
+
+})();
+</script>
